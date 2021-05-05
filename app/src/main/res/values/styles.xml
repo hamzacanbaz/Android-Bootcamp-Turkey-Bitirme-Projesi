@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/splash_orange</item>
+        <item name="android:textColor">@color/splash_orange</item>
+        <item name="hintTextColor">@color/splash_orange</item>
+        <item name="android:textCursorDrawable">@color/splash_orange</item>
+    </style>
+</resources>

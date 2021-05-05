@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.hmzcnbz.budgetapp.view.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_onBoardingScreen1"
+            app:destination="@id/onBoardingScreen1"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoardingScreen1"
+        android:name="com.example.hmzcnbz.budgetapp.view.onboarding.OnBoardingScreen1"
+        android:label="fragment_on_boarding_screen1"
+        tools:layout="@layout/fragment_on_boarding_screen1" >
+        <action
+            android:id="@+id/action_onBoardingScreen1_to_onBoardingScreen2"
+            app:destination="@id/onBoardingScreen2" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoardingScreen2"
+        android:name="com.example.hmzcnbz.budgetapp.view.onboarding.OnBoardingScreen2"
+        android:label="OnBoardingScreen2"
+        tools:layout="@layout/fragment_on_boarding_screen2">
+        <action
+            android:id="@+id/action_onBoardingScreen2_to_onBoardingScreen3"
+            app:destination="@id/onBoardingScreen3" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoardingScreen3"
+        android:name="com.example.hmzcnbz.budgetapp.view.onboarding.OnBoardingScreen3"
+        android:label="OnBoardingScreen3"
+        tools:layout="@layout/fragment_on_boarding_screen3">
+        <action
+            android:id="@+id/action_onBoardingScreen3_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.hmzcnbz.budgetapp.view.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_mainFragment_to_addExpense"
+            app:destination="@id/addExpense" />
+
+        <action
+            android:id="@+id/action_mainFragment_to_editProfile"
+            app:destination="@id/editProfile" />
+        <action
+            android:id="@+id/action_mainFragment_to_expenseDetail"
+            app:destination="@id/expenseDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/addExpense"
+        android:name="com.example.hmzcnbz.budgetapp.view.add_expense.AddExpense"
+        android:label="fragment_add_expense"
+        tools:layout="@layout/fragment_add_expense" >
+        <argument android:name="add_or_update"
+            app:argType="long"/>
+        <argument android:name="description"
+            app:argType="string"/>
+        <argument android:name="price"
+            app:argType="long"/>
+        <argument android:name="category"
+            app:argType="string"/>
+        <argument android:name="uuid"
+            app:argType="long"/>
+        <action
+            android:id="@+id/action_addExpense_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfile"
+        android:name="com.example.hmzcnbz.budgetapp.view.edit_profile.EditProfile"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_editProfile_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/expenseDetail"
+        android:name="com.example.hmzcnbz.budgetapp.view.detail_expense.ExpenseDetail"
+        android:label="ExpenseDetail"
+        tools:layout="@layout/fragment_expense_detail">
+        <argument android:name="description"
+            app:argType="string"/>
+        <argument android:name="price"
+            app:argType="long"/>
+        <argument android:name="category"
+            app:argType="string"/>
+        <argument android:name="uuid"
+            app:argType="long"/>
+    </fragment>
+</navigation>

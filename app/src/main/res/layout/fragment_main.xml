@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="mainViewModel"
+            type="com.example.hmzcnbz.budgetapp.view.main.MainViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.main.MainFragment">
+
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="30sp"
+        android:background="@drawable/border"
+        android:id="@+id/cardview"
+        app:cardBackgroundColor="@color/splash_orange"
+        android:layout_width="match_parent"
+        android:layout_height="150sp"
+        android:layout_marginStart="20sp"
+        android:layout_marginEnd="20sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/currencies">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Merhaba"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="30sp"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/cardviewName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hamza Bey"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:layout_marginStart="30sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Harcamanız"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="end"
+                android:layout_marginEnd="30sp" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/cardviewTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="5640TL"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:gravity="end"
+                    android:layout_marginEnd="30sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+    <LinearLayout
+        android:layout_margin="10sp"
+        android:orientation="horizontal"
+        android:id="@+id/currencies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardview"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerview">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tl"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TL"
+            android:background="@drawable/btn_selector"
+            android:clickable="true"
+            android:focusable="true"/>
+        <androidx.legacy.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/sterlin"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sterlin"
+            android:background="@drawable/btn_selector"
+            android:enabled="true"
+            android:clickable="true"
+            android:focusable="true"/>
+        <androidx.legacy.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/euro"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="euro"
+            android:background="@drawable/btn_selector"
+            android:clickable="true"
+            android:textColor="@color/splash_orange"
+            android:focusable="true"
+            android:enabled="true"/>
+        <androidx.legacy.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dolar"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dolar"
+            android:background="@drawable/btn_selector"
+            android:clickable="true"
+            android:focusable="true"
+            />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_margin="10sp"
+        android:id="@+id/recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currencies"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/add_expense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="25sp"
+        android:text="Ekle"
+        android:textColor="@color/white"
+        android:drawableStart="@drawable/ic_add"
+        android:paddingStart="13sp"
+        android:paddingEnd="13sp"
+        android:background="@drawable/btn_selector"
+        android:backgroundTint="@color/splash_orange"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

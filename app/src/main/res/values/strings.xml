@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Budget App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="giderlerim">Giderlerim</string>
+    <string name="onboard1_desc">Harcamalarınızı yönetmek artık çok kolay!</string>
+    <string name="onboard1_title">Giderlerim Uygulaması</string>
+    <string name="onboard_button">Geç</string>
+    <string name="onboard2_title">Kategorilendir</string>
+    <string name="onboard2_desc">Harcamaları kategorileyerek karışıklığa son ver!</string>
+    <string name="onboard3_title">Farklı para birimleri</string>
+    <string name="onboard3_desc">Harcamalarınızı sürekli güncellenen TL, Dolar, Euro veya Sterlin para birimleriyle takip edebilirsin!</string>
+    <string name="onboard3_button">Bitti</string>
+</resources>
