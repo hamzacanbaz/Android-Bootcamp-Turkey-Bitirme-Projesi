@@ -14,13 +14,13 @@ class AddExpenseViewModel( val dataSource: DatabaseDao,val currencySource:Curren
     var readAllData: LiveData<List<ExpenseEntity>> = dataSource.getAllExpenses()
     var readAllCurrencyData : LiveData<List<CurrencyEntity>> = currencySource.getAllCurrencies()
 
-    fun insertData(description:String,category:String,price:String){
+    fun insertData(description:String,category:String,price:Float){
         println("insert fun invoked")
-        dataSource.insert(ExpenseEntity(category = category,description = description,price = price.toInt()))
+        dataSource.insert(ExpenseEntity(category = category,description = description,price = price))
     }
 
-    fun updateData(description:String,category:String,price:String,id:Long){
-        dataSource.update(category = category,price = price.toInt(),description = description,id = id )
+    fun updateData(description:String,category:String,price:Float,id:Long){
+        dataSource.update(category = category,price = price,description = description,id = id )
     }
 
 }

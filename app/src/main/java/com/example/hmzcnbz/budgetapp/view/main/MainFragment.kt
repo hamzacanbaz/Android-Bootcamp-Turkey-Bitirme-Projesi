@@ -18,25 +18,27 @@ import com.example.hmzcnbz.budgetapp.adapter.ExpenseAdapter
 import com.example.hmzcnbz.budgetapp.database.ExpenseDatabase
 import com.example.hmzcnbz.budgetapp.database.ExpenseEntity
 import com.example.hmzcnbz.budgetapp.databinding.FragmentMainBinding
+import com.example.hmzcnbz.budgetapp.view.add_expense.AddExpenseViewModelFactory
 import java.text.DecimalFormat
 import java.util.*
 
 
-class MainFragment : Fragment(),ExpenseAdapter.OnItemClickListen {
+class MainFragment : Fragment(), ExpenseAdapter.OnItemClickListen {
 
-    private lateinit var binding : FragmentMainBinding
-    private lateinit var adapter : ExpenseAdapter
-    var expenseList = emptyList<ExpenseEntity>()
-    lateinit var viewmodel : MainViewModel
-    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var binding: FragmentMainBinding
+    private lateinit var adapter: ExpenseAdapter
+    private var expenseList = emptyList<ExpenseEntity>()
+    lateinit var viewmodel: MainViewModel
+    private lateinit var sharedPreferences: SharedPreferences
+    var currencyId = 2
 
 
-    private var currency_usd = 1f
-    private var currency_try = 1f
-    private var currency_gbp = 1f
-    private var currency_euro= 1f
+    private var currencyUsd = 1f
+    private var currencyTry = 1f
+    private var currencyGbp = 1f
+    private var currencyEuro = 1f
 
-    var total_price: Int = 0
+    var total_price = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,53 +47,58 @@ class MainFragment : Fragment(),ExpenseAdapter.OnItemClickListen {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater,
-            R.layout.fragment_main,container,false)
+                R.layout.fragment_main, container, false)
         // Inflate the layout for this fragment
         val application = requireNotNull(this.activity).application
         val dataSource = ExpenseDatabase.getInstance(application).databaseDao
         val currencySource = ExpenseDatabase.getInstance(application).currencyDao
 
-        val viewModelFactory =MainViewModelFactory(dataSource,currencySource,application)
-         viewmodel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
-        binding.lifecycleOwner=this
-        binding.mainViewModel=viewmodel
+        val viewModelFactory = AddExpenseViewModelFactory(dataSource, currencySource, application)
+        viewmodel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        binding.lifecycleOwner = this
+        binding.mainViewModel = viewmodel
 
-        val name =sharedPreferences.getString("name","")
-        val gender =sharedPreferences.getString("gender","")
-            binding.cardviewName.setText(name?.capitalize(Locale.ROOT)+" "+gender)
+        val name = sharedPreferences.getString("name", "")
+        val gender = sharedPreferences.getString("gender", "")
+        binding.cardviewName.setText(name?.capitalize(Locale.ROOT) + " " + gender)
 
 
+        if (name==""){
+            viewmodel.loadData()
+        }
+        //viewmodel.loadData()
 
 //        viewmodel.loadData()
         viewmodel.refreshData()
         //dataSource.delete(1)
 
+        viewmodel.readAllCurrencyData.observe(viewLifecycleOwner, {
+                if(it.size>0){
+                    currencyUsd = it[0].price
+                    currencyTry = it[2].price
+                    currencyGbp = it[1].price
+                }
 
-
-        viewmodel.readAllCurrencyData.observe(viewLifecycleOwner, Observer {
-            currency_usd = it[0].price
-            currency_try = it[2].price
-            currency_gbp = it[1].price
 
         })
 
-        viewmodel.getAllExpenses.observe(viewLifecycleOwner, Observer {
-            total_price=0
-            for (i in 0..it.size-1) {
-                total_price += it[i].price
+        viewmodel.getAllExpenses.observe(viewLifecycleOwner, {
+            total_price = 0f
+            for (element in it) {
+                total_price += element.price
             }
             val totalPriceStr = DecimalFormat("###,###").format(total_price)
-            binding.cardviewTotal.text = totalPriceStr+" €"
+            binding.cardviewTotal.text = totalPriceStr + " €"
         })
 
-        viewmodel.readData.observe(viewLifecycleOwner, Observer {
-            adapter = ExpenseAdapter(listener = this,requireContext())
+        viewmodel.readData.observe(viewLifecycleOwner, {
+            adapter = ExpenseAdapter(listener = this, requireContext())
             expenseList = it
-            adapter.setData(expenseList,currency_euro,3)
+            adapter.setData(expenseList, currencyEuro, 3)
             adapter.notifyDataSetChanged()
 
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
@@ -99,83 +106,78 @@ class MainFragment : Fragment(),ExpenseAdapter.OnItemClickListen {
         })
 
 
-
-
-
-
         var selectedButton = binding.euro
         binding.tl.setOnClickListener {
-            adapter.setData(expenses = expenseList,currency_try,0)
+            adapter.setData(expenses = expenseList, currencyTry, 0)
             adapter.notifyDataSetChanged()
 
             selectedButton.setTextColor(resources.getColor(R.color.black))
             binding.tl.setTextColor(resources.getColor(R.color.splash_orange))
-            selectedButton=binding.tl
-            var id = viewmodel.getCurrency(0)
-//            viewmodel.insertCurrency(id=id.toLong(),price = 100.toFloat())
+            selectedButton = binding.tl
+            currencyId = 0
 
-            Toast.makeText(requireContext(),id.toString(),Toast.LENGTH_SHORT).show()
-            total_price=(total_price*currency_try).toInt()
+            total_price = (total_price * currencyTry)
             val totalPriceStr = DecimalFormat("###,###").format(total_price)
 
-            binding.cardviewTotal.setText(totalPriceStr+ " $")
+            binding.cardviewTotal.setText(totalPriceStr + " TL")
+            total_price = (total_price / currencyTry)
 
         }
         binding.dolar.setOnClickListener {
-            adapter.setData(expenses = expenseList,currency_usd,1)
+            adapter.setData(expenses = expenseList, currencyUsd, 1)
             adapter.notifyDataSetChanged()
             selectedButton.setTextColor(resources.getColor(R.color.black))
             binding.dolar.setTextColor(resources.getColor(R.color.splash_orange))
-            selectedButton=binding.dolar
-            var id = viewmodel.getCurrency(3)
+            selectedButton = binding.dolar
+            currencyId = 3
 
-            Toast.makeText(requireContext(),id.toString(),Toast.LENGTH_SHORT).show()
-            total_price=(total_price*currency_usd).toInt()
+            total_price = (total_price * currencyUsd)
             val totalPriceStr = DecimalFormat("###,###").format(total_price)
 
-            binding.cardviewTotal.setText(totalPriceStr+ " $")
+            binding.cardviewTotal.setText(totalPriceStr + " $")
+            total_price = (total_price / currencyUsd)
 
 
         }
         binding.euro.setOnClickListener {
-            adapter.setData(expenses = expenseList,currency_euro,3)
+            adapter.setData(expenses = expenseList, currencyEuro, 3)
             adapter.notifyDataSetChanged()
 
             selectedButton.setTextColor(resources.getColor(R.color.black))
             binding.euro.setTextColor(resources.getColor(R.color.splash_orange))
 
-            selectedButton=binding.euro
-            var id = viewmodel.getCurrency(2)
+            selectedButton = binding.euro
+            currencyId = 2
 
-            Toast.makeText(requireContext(),id.toString(),Toast.LENGTH_SHORT).show()
-            total_price=(total_price*currency_euro).toInt()
+            total_price = (total_price * currencyEuro)
             val totalPriceStr = DecimalFormat("###,###").format(total_price)
 
-            binding.cardviewTotal.setText(totalPriceStr+ " $")
+            binding.cardviewTotal.setText(totalPriceStr + " €")
+            total_price = (total_price / currencyEuro)
+
 
         }
         binding.sterlin.setOnClickListener {
-            adapter.setData(expenses = expenseList,currency_gbp,2)
+            adapter.setData(expenses = expenseList, currencyGbp, 2)
             adapter.notifyDataSetChanged()
             selectedButton.setTextColor(resources.getColor(R.color.black))
             binding.sterlin.setTextColor(resources.getColor(R.color.splash_orange))
-            selectedButton=binding.sterlin
-            var id = viewmodel.getCurrency(1)
+            selectedButton = binding.sterlin
+            currencyId = 1
 
-            Toast.makeText(requireContext(),id.toString(),Toast.LENGTH_SHORT).show()
-
-            total_price=(total_price*currency_gbp).toInt()
+            total_price = (total_price * currencyGbp)
             val totalPriceStr = DecimalFormat("###,###").format(total_price)
 
-            binding.cardviewTotal.setText(totalPriceStr+ " $")
+            binding.cardviewTotal.setText(totalPriceStr + " £")
+            total_price = (total_price / currencyGbp)
+
 
         }
 
 
 
         binding.addExpense.setOnClickListener {
-            Toast.makeText(requireContext(),"Go",Toast.LENGTH_SHORT).show()
-            val action = MainFragmentDirections.actionMainFragmentToAddExpense(0,"",0,"",0)
+            val action = MainFragmentDirections.actionMainFragmentToAddExpense(0, "", 0, "", 0)
             findNavController().navigate(action)
         }
         binding.cardview.setOnClickListener {
@@ -186,15 +188,34 @@ class MainFragment : Fragment(),ExpenseAdapter.OnItemClickListen {
     }
 
     override fun onItemClick(position: Int) {
-        Toast.makeText(context,position.toString(), Toast.LENGTH_LONG).show()
-        viewmodel.dataSource.getAllExpenses().observe(viewLifecycleOwner, Observer {
-            println(it[position])   //it[position].uuid gönderdik gidilen yerde getexpense(id) ile çağır
-//            val action = MainFragmentDirections.actionMainFragmentToAddExpense(1.toLong(),it[position].description,it[position].price.toLong(),it[position].category,it[position].uuid)
-            val action = MainFragmentDirections.actionMainFragmentToExpenseDetail(it[position].description,it[position].price.toLong(),it[position].category,it[position].uuid)
-            findNavController().navigate(action)
+        viewmodel.dataSource.getAllExpenses().observe(viewLifecycleOwner, {
+
+            if (currencyId == 0) {
+                val action = MainFragmentDirections.actionMainFragmentToExpenseDetail(it[position].description, (it[position].price * currencyTry), it[position].category, it[position].uuid, currencyId.toLong())
+                findNavController().navigate(action)
+            } else if (currencyId == 1) {
+                val action = MainFragmentDirections.actionMainFragmentToExpenseDetail(it[position].description, (it[position].price * currencyGbp), it[position].category, it[position].uuid, currencyId.toLong())
+                findNavController().navigate(action)
+            } else if (currencyId == 2) {
+                val action = MainFragmentDirections.actionMainFragmentToExpenseDetail(it[position].description, it[position].price, it[position].category, it[position].uuid, currencyId.toLong())
+                findNavController().navigate(action)
+            } else {
+                val action = MainFragmentDirections.actionMainFragmentToExpenseDetail(it[position].description, (it[position].price * currencyUsd), it[position].category, it[position].uuid, currencyId.toLong())
+                findNavController().navigate(action)
+            }
+            currencyId = 2
         })
 
 
+    }
+
+    override fun onItemLongClick(position: Int) {
+        viewmodel.dataSource.getAllExpenses().observe(viewLifecycleOwner, {
+            //it[position].uuid gönderdik gidilen yerde getexpense(id) ile çağır
+            val action = MainFragmentDirections.actionMainFragmentToAddExpense(1.toLong(), it[position].description, it[position].price.toLong(), it[position].category, it[position].uuid)
+//            val action = MainFragmentDirections.actionMainFragmentToExpenseDetail(it[position].description,it[position].price.toLong(),it[position].category,it[position].uuid)
+            findNavController().navigate(action)
+        })
     }
 
 }

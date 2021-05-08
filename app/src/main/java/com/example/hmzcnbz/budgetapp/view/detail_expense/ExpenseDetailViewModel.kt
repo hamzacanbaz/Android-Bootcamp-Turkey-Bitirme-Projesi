@@ -5,5 +5,10 @@ import androidx.lifecycle.ViewModel
 import com.example.hmzcnbz.budgetapp.database.CurrencyDao
 import com.example.hmzcnbz.budgetapp.database.DatabaseDao
 
-class ExpenseDetailViewModel(dataSource: DatabaseDao, currencySource: CurrencyDao, application: Application) : ViewModel() {
+class ExpenseDetailViewModel(private val dataSource: DatabaseDao, currencySource: CurrencyDao, application: Application) : ViewModel() {
+
+    fun deleteExpense(id:Long){
+        dataSource.delete(id)
+    }
+
 }

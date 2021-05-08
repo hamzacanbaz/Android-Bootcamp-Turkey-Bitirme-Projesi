@@ -100,10 +100,16 @@
         <argument android:name="description"
             app:argType="string"/>
         <argument android:name="price"
-            app:argType="long"/>
+            app:argType="float"/>
         <argument android:name="category"
             app:argType="string"/>
         <argument android:name="uuid"
             app:argType="long"/>
+        <argument android:name="currency_id"
+            app:argType="long"/>
+
+        <action
+            android:id="@+id/action_expenseDetail_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

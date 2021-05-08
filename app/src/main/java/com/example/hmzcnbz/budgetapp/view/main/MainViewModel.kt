@@ -21,72 +21,37 @@ class MainViewModel(val dataSource: DatabaseDao,
                     val application: Application)
     : ViewModel() {
 
-    val readData : LiveData<List<ExpenseEntity>> = dataSource.getAllExpenses()
+    val readData: LiveData<List<ExpenseEntity>> = dataSource.getAllExpenses()
     val BASE_URL = "http://data.fixer.io/api/"
-    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
 
     private var refreshTime = 10 * 60 * 1000 * 1000 * 1000L
 
-    private fun editrefreshtime(){
-        sharedPreferences.edit().putLong("refreshTime",System.nanoTime()).apply()
+    private fun editrefreshtime() {
+        sharedPreferences.edit().putLong("refreshTime", System.nanoTime()).apply()
     }
 
-    var getAllExpenses : LiveData<List<ExpenseEntity>> = dataSource.getAllExpenses()
+    var getAllExpenses: LiveData<List<ExpenseEntity>> = dataSource.getAllExpenses()
 
 
+    var readAllCurrencyData: LiveData<List<CurrencyEntity>> = currencySource.getAllCurrencies()
 
-    var readAllCurrencyData : LiveData<List<CurrencyEntity>> = currencySource.getAllCurrencies()
 
-    fun getCurrency(id:Int) : Int{
-
-        when (id) {
-            0 -> {
-                println("tl")
-                var id =0
-            }
-            1 -> {
-                println("sterlin")
-                var id =1
-            }
-            2 -> {
-                println("euro")
-                var id =2
-            }
-            3 -> {
-                println("dolar")
-                var id =3
-            }
-        }
-        return id
-    }
-
-    fun refreshData(){
+    fun refreshData() {
         sharedPreferences = application.getSharedPreferences("firsttime", Context.MODE_PRIVATE)
 
-        val updateTime = sharedPreferences.getLong("refreshTime",0)
-        if(updateTime!=0L && System.nanoTime()-updateTime<refreshTime){
+        val updateTime = sharedPreferences.getLong("refreshTime", 0)
+        if (updateTime != 0L && System.nanoTime() - updateTime < refreshTime) {
             getDataFromSql()
-        }
-        else{
+        } else {
             loadData()
             editrefreshtime()
         }
     }
 
 
-    fun insertCurrency(id:Long,price:Float){
-        currencySource.insert(CurrencyEntity(id=id,price=price))
-    }
-
-    fun getExpense(id:Long): LiveData<ExpenseEntity>{
-        return dataSource.getExpense(id)
-    }
-
-
-
-
-    fun loadData(){
-        Toast.makeText(application,"From api", Toast.LENGTH_LONG).show()
+    fun  loadData() {
+        Toast.makeText(application, "From api", Toast.LENGTH_LONG).show()
         val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -95,30 +60,24 @@ class MainViewModel(val dataSource: DatabaseDao,
 
         viewModelScope.launch {
             val response = retrofit.getCurrency()
-            if(response.isSuccessful){
+            if (response.isSuccessful) {
 
                 currencySource.deleteAll()
 
-                println(response.body()?.get("rates")?.asJsonObject?.get("USD"))
-                println(response.body()?.get("rates")?.asJsonObject?.get("GBP"))
-                println(response.body()?.get("rates")?.asJsonObject?.get("TRY"))
+                response.body()?.get("rates")?.asJsonObject?.get("USD")?.let { CurrencyEntity(id = 0, price = it.asFloat) }?.let { currencySource.insert(it) }
+                response.body()?.get("rates")?.asJsonObject?.get("GBP")?.let { CurrencyEntity(id = 1, price = it.asFloat) }?.let { currencySource.insert(it) }
+                response.body()?.get("rates")?.asJsonObject?.get("TRY")?.let { CurrencyEntity(id = 2, price = it.asFloat) }?.let { currencySource.insert(it) }
+                currencySource.insert(CurrencyEntity(id = 3, price = 1F))
 
-                response.body()?.get("rates")?.asJsonObject?.get("USD")?.let { CurrencyEntity(id = 0,price = it.asFloat ) }?.let { currencySource.insert(it) }
-                response.body()?.get("rates")?.asJsonObject?.get("GBP")?.let { CurrencyEntity(id = 1,price = it.asFloat ) }?.let { currencySource.insert(it) }
-                response.body()?.get("rates")?.asJsonObject?.get("TRY")?.let { CurrencyEntity(id = 2,price = it.asFloat ) }?.let { currencySource.insert(it) }
-                currencySource.insert(CurrencyEntity(id = 3,price = 1F))
 
-                //response.body()?.get("rates")?.asJsonObject?.get("USD")?.let { CurrencyEntity(id = 0,price = it.asFloat ) }?.let { currencySource.insert(it) }
-                //insert to sql
             }
         }
     }
 
-    private fun getDataFromSql(){
-        Toast.makeText(application,"From SQLite", Toast.LENGTH_LONG).show()
+    private fun getDataFromSql() {
+        Toast.makeText(application, "From SQLite", Toast.LENGTH_LONG).show()
         readAllCurrencyData = currencySource.getAllCurrencies()
     }
-
 
 
 }

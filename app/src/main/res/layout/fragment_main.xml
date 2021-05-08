@@ -47,6 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Merhaba"
+                    android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="@color/white"
                     android:layout_marginStart="30sp"/>
@@ -55,6 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Hamza Bey"
+                    android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:layout_marginStart="30sp"/>
@@ -70,6 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Harcamanız"
+                android:textStyle="bold"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:gravity="end"
@@ -79,6 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="5640TL"
+                    android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:gravity="end"

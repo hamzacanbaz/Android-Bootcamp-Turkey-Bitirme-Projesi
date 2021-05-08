@@ -6,26 +6,26 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "expense_table")
 data class ExpenseEntity(
-    @PrimaryKey(autoGenerate = true)
-    var uuid:Long = 0L,
+        @PrimaryKey(autoGenerate = true)
+        var uuid: Long = 0L,
 
-    @ColumnInfo(name = "category")
-    var category:String = "",
+        @ColumnInfo(name = "category")
+        var category: String = "",
 
-    @ColumnInfo(name = "description")
-    var description : String = "",
+        @ColumnInfo(name = "description")
+        var description: String = "",
 
-    @ColumnInfo(name = "price")
-    var price : Int = 0
+        @ColumnInfo(name = "price")
+        var price: Float = 0f
 )
 
 @Entity(tableName = "currency_table")
 data class CurrencyEntity(
         @PrimaryKey(autoGenerate = true)
-        var uuid:Long = 0L,
+        var uuid: Long = 0L,
         @ColumnInfo(name = "id")
-        var id : Long = 0L,
+        var id: Long = 0L,
         @ColumnInfo(name = "euro_price")
-        var price : Float = 0F
+        var price: Float = 0F
 )
 

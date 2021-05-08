@@ -28,7 +28,6 @@ class SplashFragment : Fragment() {
             findNavController().navigate(action)
 
         }
-        println("delayed")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +61,6 @@ class SplashFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        sharedPreferences.edit().putBoolean("first",true).apply()
         sharedPreferences.edit().putString("name","").apply()
         sharedPreferences.edit().putString("gender","").apply()
         sharedPreferences.edit().putInt("total",0).apply()

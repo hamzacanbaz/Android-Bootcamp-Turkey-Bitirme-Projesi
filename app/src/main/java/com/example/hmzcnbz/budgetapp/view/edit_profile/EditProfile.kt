@@ -14,10 +14,10 @@ import com.example.hmzcnbz.budgetapp.R
 import com.example.hmzcnbz.budgetapp.databinding.FragmentEditProfileBinding
 
 class EditProfile : Fragment() {
-    private lateinit var binding : FragmentEditProfileBinding
-    private lateinit var sharedPreferences : SharedPreferences
-    private var gender : String? = ""
-    private var name : String? = ""
+    private lateinit var binding: FragmentEditProfileBinding
+    private lateinit var sharedPreferences: SharedPreferences
+    private var gender: String? = ""
+    private var name: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,27 +27,24 @@ class EditProfile : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        sharedPreferences = requireActivity().getSharedPreferences("firsttime",Context.MODE_PRIVATE)
+        sharedPreferences = requireActivity().getSharedPreferences("firsttime", Context.MODE_PRIVATE)
 
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_edit_profile,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false)
 
-        name =sharedPreferences.getString("name","")
+        name = sharedPreferences.getString("name", "")
         binding.profileName.setText(name)
 
-        gender =sharedPreferences.getString("gender","")
-        if(gender=="Bey"){
-            binding.man.isChecked=true
+        gender = sharedPreferences.getString("gender", "")
+        if (gender == "Bey") {
+            binding.man.isChecked = true
+        } else if (gender == "Hanım") {
+            binding.woman.isChecked = true
+        } else {
+            binding.other.isChecked = true
         }
-        else if(gender=="Hanım"){
-            binding.woman.isChecked=true
-        }
-        else{
-            binding.other.isChecked=true
-        }
-        println("name :"+name+"gender:"+gender)
 
         binding.radioGroupGender.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId){
+            when (checkedId) {
                 R.id.man -> {
                     gender = "Bey"
                 }
@@ -61,11 +58,11 @@ class EditProfile : Fragment() {
         }
 
         binding.updateProfile.setOnClickListener {
-            sharedPreferences.edit().putString("name",binding.profileName.text.toString()).apply()
-            sharedPreferences.edit().putString("gender",gender).apply()
+            sharedPreferences.edit().putString("name", binding.profileName.text.toString()).apply()
+            sharedPreferences.edit().putString("gender", gender).apply()
             val action = EditProfileDirections.actionEditProfileToMainFragment()
             findNavController().navigate(action)
-            Toast.makeText(requireContext(),"Kaydedildi",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Kaydedildi", Toast.LENGTH_SHORT).show()
         }
         return binding.root
     }

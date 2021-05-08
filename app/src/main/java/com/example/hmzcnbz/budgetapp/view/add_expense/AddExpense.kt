@@ -18,7 +18,6 @@ import com.example.hmzcnbz.budgetapp.R
 import com.example.hmzcnbz.budgetapp.database.ExpenseDatabase
 import com.example.hmzcnbz.budgetapp.databinding.FragmentAddExpenseBinding
 import java.lang.Exception
-import kotlin.math.roundToInt
 
 
 class AddExpense : Fragment() {
@@ -29,7 +28,7 @@ class AddExpense : Fragment() {
     private var currency_try = 1f
     private var currency_gbp = 1f
     private var currency_euro = 1f
-    private var new_price = 0
+    private var new_price = 0f
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +46,7 @@ class AddExpense : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_expense, container, false)
         if (argum.addOrUpdate == 1L) {
             binding.addExpenseButton.text = "Guncelle"
+            binding.toolbar.title="Harcama Güncelle"
             binding.addExpenseDescription.setText(argum.description)
             binding.addExpensePrice.setText(argum.price.toString())
             println("category:${argum.category}")
@@ -102,7 +102,7 @@ class AddExpense : Fragment() {
             when (checkedId) {
                 R.id.tl -> {
                     try {
-                        new_price = (Integer.parseInt(binding.addExpensePrice.text.toString()).toFloat() / currency_try).roundToInt()
+                        new_price = ((binding.addExpensePrice.text.toString()).toFloat() / currency_try)
                         println("newprice=$new_price")
                     } catch (e: Exception) {
                         println(e)
@@ -111,7 +111,7 @@ class AddExpense : Fragment() {
                 R.id.dolar -> {
                     try {
 //                        println("new price"+ )
-                        new_price = (Integer.parseInt(binding.addExpensePrice.text.toString()).toFloat() / currency_usd).roundToInt()
+                        new_price = ((binding.addExpensePrice.text.toString()).toFloat() / currency_usd)
                         println("newprice=$new_price")
                     } catch (e: Exception) {
                         println(e)
@@ -120,7 +120,7 @@ class AddExpense : Fragment() {
                 }
                 R.id.euro -> {
                     try {
-                        new_price = (Integer.parseInt(binding.addExpensePrice.text.toString()).toFloat() / currency_euro).roundToInt()
+                        new_price = ((binding.addExpensePrice.text.toString()).toFloat() / currency_euro)
                         println("newprice=$new_price")
                     } catch (e: Exception) {
                         println(e)
@@ -128,7 +128,7 @@ class AddExpense : Fragment() {
                 }
                 R.id.sterlin -> {
                     try {
-                        new_price = (Integer.parseInt(binding.addExpensePrice.text.toString()).toFloat() / currency_gbp).roundToInt()
+                        new_price = ((binding.addExpensePrice.text.toString()).toFloat() / currency_gbp)
                         println("newprice=$new_price")
                     } catch (e: Exception) {
                         println(e)
@@ -141,15 +141,15 @@ class AddExpense : Fragment() {
             if (expense_type == "") {
                 expense_type = "diğer"
             }
-            if (new_price == 0) {
-                new_price = (Integer.parseInt(binding.addExpensePrice.text.toString()).toFloat() / currency_euro).roundToInt()
+            if (new_price == 0f) {
+                new_price = ((binding.addExpensePrice.text.toString()).toFloat() / currency_euro)
 
             }
             if (argum.addOrUpdate == 1L) {
-                viewmodel.updateData(binding.addExpenseDescription.text.toString(), expense_type, new_price.toString(), argum.uuid)
+                viewmodel.updateData(binding.addExpenseDescription.text.toString(), expense_type, new_price, argum.uuid)
             } else {
                 println("new price2$new_price")
-                viewmodel.insertData(binding.addExpenseDescription.text.toString(), expense_type, new_price.toString())
+                viewmodel.insertData(binding.addExpenseDescription.text.toString(), expense_type, new_price)
             }
             val action = AddExpenseDirections.actionAddExpenseToMainFragment()
             findNavController().navigate(action)

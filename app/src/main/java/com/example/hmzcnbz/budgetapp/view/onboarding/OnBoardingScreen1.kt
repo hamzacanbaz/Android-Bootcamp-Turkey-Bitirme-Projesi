@@ -1,5 +1,6 @@
 package com.example.hmzcnbz.budgetapp.view.onboarding
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,14 +11,16 @@ import com.example.hmzcnbz.budgetapp.view.onboarding.OnBoardingScreen1Directions
 import com.example.hmzcnbz.budgetapp.R
 
 class OnBoardingScreen1 : Fragment() {
+    lateinit var sharedPreferences : SharedPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences =  requireActivity().getSharedPreferences("firsttime",
+            android.content.Context.MODE_PRIVATE)
 
-        /*val cb = requireActivity().onBackPressedDispatcher.addCallback(this){
-            println("back")
-        }*/
+        sharedPreferences.edit().putBoolean("first",true).apply()
+
 
     }
 

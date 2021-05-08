@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewModel"
@@ -12,13 +12,29 @@
     android:layout_height="match_parent"
     tools:context=".view.detail_expense.ExpenseDetail"
     android:orientation="vertical">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Harcama Detayı"
+            app:titleTextColor="@color/white"
+            android:background="@color/splash_orange"
+            />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <ImageView
         android:id="@+id/expenseDetail_image"
         android:layout_width="100sp"
         android:layout_height="100sp"
         android:layout_gravity="center"
-        android:layout_marginTop="100sp"/>
+        android:layout_marginTop="70sp" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/expenseDetail_description"
         android:layout_marginTop="50sp"
@@ -31,6 +47,7 @@
         android:id="@+id/expenseDetail_price"
         android:layout_marginTop="50sp"
         android:text="Price"
+        android:textStyle="bold"
         android:textSize="30sp"
         android:gravity="center"
         android:layout_width="match_parent"
